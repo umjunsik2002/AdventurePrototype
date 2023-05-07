@@ -62,7 +62,7 @@ class Demo1 extends AdventureScene {
                 });
             })
 
-        let bank = this.add.text(this.cameras.main.centerX, 100, "🏦 Bank")
+        let bank = this.add.text(this.cameras.main.centerX-240, 100, "🏦 Bank")
             .setFontSize(128)
             .setInteractive()
             .setOrigin(0.5)
@@ -78,7 +78,7 @@ class Demo1 extends AdventureScene {
                     this.loseItem("dollar");
                     this.loseItem("euro");
                     this.loseItem("pound");
-                    this.showMessage("Thank you my dear customer!");
+                    this.showMessage("Thank you my dear customer, welcome in!");
                     this.gotoScene('demo2');
                 }
             })
@@ -88,32 +88,43 @@ class Demo1 extends AdventureScene {
 
 class Demo2 extends AdventureScene {
     constructor() {
-        super("demo2", "The second room has a long name (it truly does).");
+        super("demo2", "My boy you are inside the bank.");
     }
     onEnter() {
-        this.add.text(this.w * 0.3, this.w * 0.4, "just go back")
-            .setFontSize(this.s * 2)
+
+        let ATM = this.add.text(this.cameras.main.centerX-240, this.cameras.main.centerY, "🏧\nATM")
+            .setFontSize(192)
             .setInteractive()
+            .setOrigin(0.5)
             .on('pointerover', () => {
-                this.showMessage("You've got no other choice, really.");
+                this.showMessage("It is a pretty cool looking ATM.");
             })
             .on('pointerdown', () => {
-                this.gotoScene('demo1');
-            });
+                if (this.hasItem("key")) {
+                    this.loseItem("key");
+                    this.showMessage("ATM opened. Let's go inside the ATM!");
+                    this.gotoScene('outro');
+                }
+            })
 
-        let finish = this.add.text(this.w * 0.6, this.w * 0.2, '(finish the game)')
+        let key = this.add.text(1400, 1000, "🔑")
+            .setFontSize(64)
             .setInteractive()
+            .setOrigin(0.5)
             .on('pointerover', () => {
-                this.showMessage('*giggles*');
+                this.showMessage("It's a golden key! I wonder what it is for.")
+            })
+            .on('pointerdown', () => {
+                this.showMessage("You picked up the key.");
+                this.gainItem('key');
                 this.tweens.add({
-                    targets: finish,
-                    x: this.s + (this.h - 2 * this.s) * Math.random(),
-                    y: this.s + (this.h - 2 * this.s) * Math.random(),
-                    ease: 'Sine.inOut',
-                    duration: 500
+                    targets: key,
+                    y: `-=${2 * this.s}`,
+                    alpha: { from: 1, to: 0 },
+                    duration: 500,
+                    onComplete: () => key.destroy()
                 });
             })
-            .on('pointerdown', () => this.gotoScene('outro'));
     }
 }
 
@@ -142,7 +153,7 @@ class Outro extends Phaser.Scene {
         const moneyEmoji = this.add.text(this.cameras.main.centerX, this.cameras.main.centerY, "💸").setFontSize(512).setOrigin(0.5).setInteractive();
         moneyEmoji.on('pointerdown', () => {
             this.cameras.main.fade(1000, 0,0,0);
-            this.time.delayedCall(1000, () => this.scene.start('demo1'));
+            this.time.delayedCall(1000, () => this.scene.start('intro'));
         });
     }
 }
