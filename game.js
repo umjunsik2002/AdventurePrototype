@@ -5,55 +5,80 @@ class Demo1 extends AdventureScene {
 
     onEnter() {
 
-        let clip = this.add.text(this.w * 0.3, this.w * 0.3, "📎 paperclip")
-            .setFontSize(this.s * 2)
+        let dollar = this.add.text(200, 400, "💵")
+            .setFontSize(128)
             .setInteractive()
-            .on('pointerover', () => this.showMessage("Metal, bent."))
-            .on('pointerdown', () => {
-                this.showMessage("No touching!");
-                this.tweens.add({
-                    targets: clip,
-                    x: '+=' + this.s,
-                    repeat: 2,
-                    yoyo: true,
-                    ease: 'Sine.inOut',
-                    duration: 100
-                });
-            });
-
-        let key = this.add.text(this.w * 0.5, this.w * 0.1, "🔑 key")
-            .setFontSize(this.s * 2)
-            .setInteractive()
+            .setOrigin(0.5)
             .on('pointerover', () => {
-                this.showMessage("It's a nice key.")
+                this.showMessage("It's the American dollar!")
             })
             .on('pointerdown', () => {
-                this.showMessage("You pick up the key.");
-                this.gainItem('key');
+                this.showMessage("You picked up the dollar.");
+                this.gainItem('dollar');
                 this.tweens.add({
-                    targets: key,
+                    targets: dollar,
                     y: `-=${2 * this.s}`,
                     alpha: { from: 1, to: 0 },
                     duration: 500,
-                    onComplete: () => key.destroy()
+                    onComplete: () => dollar.destroy()
                 });
             })
 
-        let door = this.add.text(this.w * 0.1, this.w * 0.15, "🚪 locked door")
-            .setFontSize(this.s * 2)
+        let euro = this.add.text(500, 900, "💶")
+            .setFontSize(128)
             .setInteractive()
+            .setOrigin(0.5)
             .on('pointerover', () => {
-                if (this.hasItem("key")) {
-                    this.showMessage("You've got the key for this door.");
+                this.showMessage("It's the European euro!")
+            })
+            .on('pointerdown', () => {
+                this.showMessage("You picked up the euro.");
+                this.gainItem('euro');
+                this.tweens.add({
+                    targets: euro,
+                    y: `-=${2 * this.s}`,
+                    alpha: { from: 1, to: 0 },
+                    duration: 500,
+                    onComplete: () => euro.destroy()
+                });
+            })
+
+        let pound = this.add.text(1100, 500, "💷")
+            .setFontSize(128)
+            .setInteractive()
+            .setOrigin(0.5)
+            .on('pointerover', () => {
+                this.showMessage("It's the British pound!")
+            })
+            .on('pointerdown', () => {
+                this.showMessage("You picked up the pound.");
+                this.gainItem('pound');
+                this.tweens.add({
+                    targets: pound,
+                    y: `-=${2 * this.s}`,
+                    alpha: { from: 1, to: 0 },
+                    duration: 500,
+                    onComplete: () => pound.destroy()
+                });
+            })
+
+        let bank = this.add.text(this.cameras.main.centerX, 100, "🏦 Bank")
+            .setFontSize(128)
+            .setInteractive()
+            .setOrigin(0.5)
+            .on('pointerover', () => {
+                if (this.hasItem("dollar") && this.hasItem("euro") && this.hasItem("pound")) {
+                    this.showMessage("You are rich enough to go inside the bank!");
                 } else {
-                    this.showMessage("It's locked. Can you find a key?");
+                    this.showMessage("You are too poor to enter. Collect more money $o$!!");
                 }
             })
             .on('pointerdown', () => {
-                if (this.hasItem("key")) {
-                    this.loseItem("key");
-                    this.showMessage("*squeak*");
-                    door.setText("🚪 unlocked door");
+                if (this.hasItem("dollar") && this.hasItem("euro") && this.hasItem("pound")) {
+                    this.loseItem("dollar");
+                    this.loseItem("euro");
+                    this.loseItem("pound");
+                    this.showMessage("Thank you my dear customer!");
                     this.gotoScene('demo2');
                 }
             })
@@ -97,9 +122,10 @@ class Intro extends Phaser.Scene {
         super('intro')
     }
     create() {
-        this.add.text(50,50, "Adventure awaits!").setFontSize(50);
-        this.add.text(50,100, "Click anywhere to begin.").setFontSize(20);
-        this.input.on('pointerdown', () => {
+        this.add.text(50,50, "Economy").setFontSize(80);
+        this.add.text(50,150, "Click the emoji below to start.").setFontSize(36);
+        const moneyEmoji = this.add.text(this.cameras.main.centerX, this.cameras.main.centerY, "🤑").setFontSize(512).setOrigin(0.5).setInteractive();
+        moneyEmoji.on('pointerdown', () => {
             this.cameras.main.fade(1000, 0,0,0);
             this.time.delayedCall(1000, () => this.scene.start('demo1'));
         });
@@ -111,9 +137,13 @@ class Outro extends Phaser.Scene {
         super('outro');
     }
     create() {
-        this.add.text(50, 50, "That's all!").setFontSize(50);
-        this.add.text(50, 100, "Click anywhere to restart.").setFontSize(20);
-        this.input.on('pointerdown', () => this.scene.start('intro'));
+        this.add.text(50, 50, "That's all!").setFontSize(80);
+        this.add.text(50, 150, "Click the emoji again to restart").setFontSize(36);
+        const moneyEmoji = this.add.text(this.cameras.main.centerX, this.cameras.main.centerY, "💸").setFontSize(512).setOrigin(0.5).setInteractive();
+        moneyEmoji.on('pointerdown', () => {
+            this.cameras.main.fade(1000, 0,0,0);
+            this.time.delayedCall(1000, () => this.scene.start('demo1'));
+        });
     }
 }
 
