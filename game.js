@@ -709,42 +709,17 @@ class Demo3 extends AdventureScene {
 
 class Demo4 extends AdventureScene {
     constructor() {
-        super("demo4", "My boy you are inside the bank.");
+        super("demo4", "Now I am rich, let's go outside the bank!");
     }
     onEnter() {
 
-        let ATM = this.add.text(this.cameras.main.centerX-240, this.cameras.main.centerY, "🏧\nATM")
+        let door = this.add.text(this.cameras.main.centerX-240, this.cameras.main.centerY, "🚪")
             .setFontSize(192)
             .setInteractive()
             .setOrigin(0.5)
-            .on('pointerover', () => {
-                this.showMessage("It is a pretty cool looking ATM.");
-            })
             .on('pointerdown', () => {
-                if (this.hasItem("key")) {
-                    this.loseItem("key");
-                    this.showMessage("ATM opened. Let's go inside the ATM!");
-                    this.gotoScene('outro');
-                }
-            })
-
-        let key = this.add.text(1400, 1000, "🔑")
-            .setFontSize(64)
-            .setInteractive()
-            .setOrigin(0.5)
-            .on('pointerover', () => {
-                this.showMessage("It's a golden key! I wonder what it is for.")
-            })
-            .on('pointerdown', () => {
-                this.showMessage("You picked up the key.");
-                this.gainItem('key');
-                this.tweens.add({
-                    targets: key,
-                    y: `-=${2 * this.s}`,
-                    alpha: { from: 1, to: 0 },
-                    duration: 500,
-                    onComplete: () => key.destroy()
-                });
+                this.showMessage("Adios, bank!");
+                this.gotoScene('outro');
             })
     }
 }
