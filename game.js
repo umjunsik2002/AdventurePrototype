@@ -151,8 +151,11 @@ class Demo3 extends AdventureScene {
                     }
                 }
                 if (allItemsPresent) {
+                    for (let i = 0; i < items.length; i++) {
+                        this.loseItem(items[i]);
+                    }
                     this.showMessage("*cracks*");
-                    this.gotoScene('outro');
+                    this.gotoScene('demo4');
                 }
                 else {
                     this.showMessage("I should explore this place more...");
@@ -583,10 +586,10 @@ class Demo3 extends AdventureScene {
                                 .setInteractive()
                                 .setOrigin(0.5)
                                 .on('pointerover', () => {
-                                    this.showMessage("It's just the money.")
+                                    this.showMessage("It's just the gem.")
                                 })
                                 .on('pointerdown', () => {
-                                this.showMessage("You picked up the money.");
+                                this.showMessage("You picked up the gem.");
                                 this.gainItem('gem1');
                                 this.tweens.add({
                                     targets: gem1,
@@ -608,10 +611,10 @@ class Demo3 extends AdventureScene {
                                 .setInteractive()
                                 .setOrigin(0.5)
                                 .on('pointerover', () => {
-                                    this.showMessage("It's just the money.")
+                                    this.showMessage("It's just the gem.")
                                 })
                                 .on('pointerdown', () => {
-                                this.showMessage("You picked up the money.");
+                                this.showMessage("You picked up the gem.");
                                 this.gainItem('gem2');
                                 this.tweens.add({
                                     targets: gem2,
@@ -633,10 +636,10 @@ class Demo3 extends AdventureScene {
                                 .setInteractive()
                                 .setOrigin(0.5)
                                 .on('pointerover', () => {
-                                    this.showMessage("It's just the money.")
+                                    this.showMessage("It's just the gem.")
                                 })
                                 .on('pointerdown', () => {
-                                this.showMessage("You picked up the money.");
+                                this.showMessage("You picked up the gem.");
                                 this.gainItem('gem3');
                                 this.tweens.add({
                                     targets: gem3,
@@ -658,10 +661,10 @@ class Demo3 extends AdventureScene {
                                 .setInteractive()
                                 .setOrigin(0.5)
                                 .on('pointerover', () => {
-                                    this.showMessage("It's just the money.")
+                                    this.showMessage("It's just the debit card.")
                                 })
                                 .on('pointerdown', () => {
-                                this.showMessage("You picked up the money.");
+                                this.showMessage("You picked up the card.");
                                 this.gainItem('card');
                                 this.tweens.add({
                                     targets: card,
@@ -699,6 +702,48 @@ class Demo3 extends AdventureScene {
                     alpha: { from: 1, to: 0 },
                     duration: 500,
                     onComplete: () => hammer.destroy()
+                });
+            })
+    }
+}
+
+class Demo4 extends AdventureScene {
+    constructor() {
+        super("demo4", "My boy you are inside the bank.");
+    }
+    onEnter() {
+
+        let ATM = this.add.text(this.cameras.main.centerX-240, this.cameras.main.centerY, "🏧\nATM")
+            .setFontSize(192)
+            .setInteractive()
+            .setOrigin(0.5)
+            .on('pointerover', () => {
+                this.showMessage("It is a pretty cool looking ATM.");
+            })
+            .on('pointerdown', () => {
+                if (this.hasItem("key")) {
+                    this.loseItem("key");
+                    this.showMessage("ATM opened. Let's go inside the ATM!");
+                    this.gotoScene('outro');
+                }
+            })
+
+        let key = this.add.text(1400, 1000, "🔑")
+            .setFontSize(64)
+            .setInteractive()
+            .setOrigin(0.5)
+            .on('pointerover', () => {
+                this.showMessage("It's a golden key! I wonder what it is for.")
+            })
+            .on('pointerdown', () => {
+                this.showMessage("You picked up the key.");
+                this.gainItem('key');
+                this.tweens.add({
+                    targets: key,
+                    y: `-=${2 * this.s}`,
+                    alpha: { from: 1, to: 0 },
+                    duration: 500,
+                    onComplete: () => key.destroy()
                 });
             })
     }
@@ -742,7 +787,7 @@ const game = new Phaser.Game({
         width: 1920,
         height: 1080
     },
-    scene: [Intro, Demo1, Demo2, Demo3, Outro],
+    scene: [Intro, Demo1, Demo2, Demo3, Demo4, Outro],
     title: "Adventure Game",
 });
 
