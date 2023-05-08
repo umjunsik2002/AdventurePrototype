@@ -142,7 +142,15 @@ class Demo3 extends AdventureScene {
                 this.showMessage("You can exit the ATM through this door.");
             })
             .on('pointerdown', () => {
-                if (this.hasItem("money0") && this.hasItem("money1") && this.hasItem("money2") && this.hasItem("money3") && this.hasItem("money4") && this.hasItem("money5") && this.hasItem("money6") && this.hasItem("money7") && this.hasItem("money8") && this.hasItem("money9") && this.hasItem("moneya") && this.hasItem("moneyb") && this.hasItem("moneyc") && this.hasItem("moneyd") && this.hasItem("moneye") && this.hasItem("moneyf") && this.hasItem("gem1") && this.hasItem("gem2") && this.hasItem("gem3") && this.hasItem("card")) {
+                let items = ["money0", "money1", "money2", "money3", "money4", "money5", "money6", "money7", "money8", "money9", "moneya", "moneyb", "moneyc", "moneyd", "moneye", "moneyf", "gem1", "gem2", "gem3", "card"];
+                let allItemsPresent = true;
+                for (let i = 0; i < items.length; i++) {
+                    if (!this.hasItem(items[i])) {
+                        allItemsPresent = false;
+                        break;
+                    }
+                }
+                if (allItemsPresent) {
                     this.showMessage("*cracks*");
                     this.gotoScene('outro');
                 }
