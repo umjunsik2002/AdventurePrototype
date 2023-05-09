@@ -1,3 +1,18 @@
+class Intro extends Phaser.Scene {
+    constructor() {
+        super('intro')
+    }
+    create() {
+        this.add.text(50,50, "Economy").setFontSize(80);
+        this.add.text(50,150, "Click the emoji below to start.").setFontSize(36);
+        const moneyEmoji = this.add.text(this.cameras.main.centerX, this.cameras.main.centerY, "💸").setFontSize(512).setOrigin(0.5).setInteractive();
+        moneyEmoji.on('pointerdown', () => {
+            this.cameras.main.fade(1000, 0,0,0);
+            this.time.delayedCall(1000, () => this.scene.start('demo1'));
+        });
+    }
+}
+
 class Demo1 extends AdventureScene {
     constructor() {
         super("demo1", "First Room");
@@ -719,34 +734,66 @@ class Demo4 extends AdventureScene {
             .setOrigin(0.5)
             .on('pointerdown', () => {
                 this.showMessage("Adios, bank!");
-                this.gotoScene('outro');
+                this.gotoScene('demo5');
             })
     }
 }
 
-class Intro extends Phaser.Scene {
+class Demo5 extends AdventureScene {
     constructor() {
-        super('intro')
+        super("demo5", "Let's buy a car to go somewhere else!");
+    }
+    onEnter() {
+
+        let policecar = this.add.text(360, this.cameras.main.centerY, "🚓")
+            .setFontSize(384)
+            .setInteractive()
+            .setOrigin(0.5)
+            .on('pointerover', () => {
+                this.showMessage("It is a pretty cool looking police car.");
+            })
+            .on('pointerdown', () => {
+                this.showMessage("*Siren sound bursts*");
+                this.gotoScene('badending');
+            })
+
+        let bugatti = this.add.text(1080, this.cameras.main.centerY, "🏎️")
+            .setFontSize(384)
+            .setInteractive()
+            .setOrigin(0.5)
+            .on('pointerover', () => {
+                this.showMessage("It is a pretty cool looking super car.");
+            })
+            .on('pointerdown', () => {
+                this.showMessage("What color is your Bugatti?");
+                this.gotoScene('goodending');
+            })
+    }
+}
+
+class Badending extends Phaser.Scene {
+    constructor() {
+        super('badending');
     }
     create() {
-        this.add.text(50,50, "Economy").setFontSize(80);
-        this.add.text(50,150, "Click the emoji below to start.").setFontSize(36);
-        const moneyEmoji = this.add.text(this.cameras.main.centerX, this.cameras.main.centerY, "🤑").setFontSize(512).setOrigin(0.5).setInteractive();
+        this.add.text(50, 50, "Oh no! You were caught by the police!").setFontSize(80);
+        this.add.text(50, 150, "Click the emoji again to restart").setFontSize(36);
+        const moneyEmoji = this.add.text(this.cameras.main.centerX, this.cameras.main.centerY, "👮").setFontSize(512).setOrigin(0.5).setInteractive();
         moneyEmoji.on('pointerdown', () => {
             this.cameras.main.fade(1000, 0,0,0);
-            this.time.delayedCall(1000, () => this.scene.start('demo1'));
+            this.time.delayedCall(1000, () => this.scene.start('intro'));
         });
     }
 }
 
-class Outro extends Phaser.Scene {
+class Goodending extends Phaser.Scene {
     constructor() {
-        super('outro');
+        super('goodending');
     }
     create() {
-        this.add.text(50, 50, "That's all!").setFontSize(80);
+        this.add.text(50, 50, "Congratulations, you are rich now!").setFontSize(80);
         this.add.text(50, 150, "Click the emoji again to restart").setFontSize(36);
-        const moneyEmoji = this.add.text(this.cameras.main.centerX, this.cameras.main.centerY, "💸").setFontSize(512).setOrigin(0.5).setInteractive();
+        const moneyEmoji = this.add.text(this.cameras.main.centerX, this.cameras.main.centerY, "🤑").setFontSize(512).setOrigin(0.5).setInteractive();
         moneyEmoji.on('pointerdown', () => {
             this.cameras.main.fade(1000, 0,0,0);
             this.time.delayedCall(1000, () => this.scene.start('intro'));
@@ -762,7 +809,7 @@ const game = new Phaser.Game({
         width: 1920,
         height: 1080
     },
-    scene: [Intro, Demo1, Demo2, Demo3, Demo4, Outro],
+    scene: [Intro, Demo1, Demo2, Demo3, Demo4, Demo5, Badending, Goodending],
     title: "Adventure Game",
 });
 
